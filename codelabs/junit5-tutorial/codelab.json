@@ -1,0 +1,25 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2022-11-13T16:44:30Z",
+  "id": "junit5-tutorial",
+  "duration": 67,
+  "title": "JUnit5 Tutorial",
+  "authors": "Panatchai Vathanasri",
+  "summary": "In this codelab, you'll be learning and writing unit tests using JUnit5.",
+  "source": "1JB8be_1jipuGUN0CW-0p1m6kBP3YQKCdJ-HlajBIiLY",
+  "theme": "web",
+  "status": [
+    "published"
+  ],
+  "category": [
+    "web"
+  ],
+  "tags": [
+    "web"
+  ],
+  "feedback": "https://github.com/PanatchaiV22/solid-principles",
+  "url": "junit5-tutorial"
+}
