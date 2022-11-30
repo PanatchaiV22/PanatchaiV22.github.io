@@ -25,7 +25,7 @@
                   id="junit5-tutorial"
                   title="JUnit5 Tutorial"
                   environment="web"
-                  feedback-link="https://github.com/PanatchaiV22/solid-principles">
+                  feedback-link="https://forms.gle/vdiCfQoiLnuDLb7m9">
     
       <google-codelab-step label="Introduction" duration="5">
         <p><strong>Last Updated:</strong> 2022-11-10</p>
@@ -58,7 +58,7 @@
 <h2 is-upgraded><strong>Run Test</strong></h2>
 <h3 is-upgraded><strong>Using Short Key</strong><br></h3>
 <p>To run the test using short-key <strong>Control</strong> + <strong>Shift</strong> + <strong>R</strong>.</p>
-<p>Observe the logs inside the test result. Can you guess the result?</p>
+<p>Observe the logs inside the test result. Can you make a guess?</p>
 <h3 is-upgraded><strong>Using GUI</strong></h3>
 <p>Right click on the test and select <em><code>Run ‘JUnit5LifeCycle'</code></em></p>
 <p class="image-container"><img style="width: 360.70px" src="img/b8350a417cd03cdc.png"></p>
@@ -67,7 +67,7 @@
 <p class="image-container"><img style="width: 624.00px" src="img/8f8a7973a444937d.png"></p>
 <p>and if you click on the <code>test()</code> function, you will instead see the following</p>
 <p class="image-container"><img style="width: 624.00px" src="img/8035394aef791014.png"></p>
-<p>This is because <code>JUnit5LifeCycle</code> represents our test class, a container, which contains each individual test such as our <code>test()</code> method. It should be apparent that both <code>BeforeAll</code> and <code>AfterEach</code> run once per test-class or container before and after all the tests are executed respectively. For that reason both have to be statically defined as <code>@JvmStatic</code> as shown below.</p>
+<p>This is because <code>JUnit5LifeCycle</code> represents our test class, a container, which contains each individual test such as our <code>test()</code> method. It should be apparent that both <code>BeforeAll</code> and <code>AfterAll</code> run once per test-class or container before and after all the tests are executed respectively. For that reason both have to be statically defined as <code>@JvmStatic</code> as shown below.</p>
 <pre><code>    companion object {
         @JvmStatic
         @BeforeAll
@@ -81,9 +81,8 @@
             println(&#34;AfterAll&#34;)
         }
     }</code></pre>
-<aside class="special"><p><strong>Note:</strong> You can also define @BeforeAll and @AfterAll as non-static function just like any other regular functions by annotating your test class with @TestInstance(TestInstance.Lifecycle.PER_CLASS). However, this will also change the behavior of the test. We will be getting into this in detail in a bit.</p>
-</aside>
 <p>The rest is self explanatory where <code>BeforeEach</code> will be executed before each <code>Test</code> method, then the <code>Test</code> itself is executed, followed by <code>AfterEach</code>. Next we will be doing another experiment on a different lifecycle.</p>
+<p>In addition, you can also define <code>@BeforeAll</code> and <code>@AfterAll</code> as non-static function just like any other regular functions by annotating your test class with <code>@TestInstance(TestInstance.Lifecycle.PER_CLASS)</code>. However, this will also change the behavior of the test, which we will be getting into this in detail in a bit.</p>
 <h2 is-upgraded><strong>Further Lifecycle Experiment</strong></h2>
 <h3 is-upgraded><strong>Rename test() to test1()</strong></h3>
 <pre><code>@Test                      @Test
@@ -97,7 +96,7 @@ fun test2() {
 }</code></pre>
 <p>Then Run Test</p>
 <h3 is-upgraded><strong>The result</strong></h3>
-<p>It should plentifully obvious to point out now that <code>BeforeAll</code> and <code>AfterAll</code> run before and after all the tests respectively.</p>
+<p>It should be plentifully obvious to point out now that <code>BeforeAll</code> and <code>AfterAll</code> run before and after all the tests respectively.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/a01cc69b579b4d7c.png"></p>
 <p>While <code>BeforeEach</code> and <code>AfterEach</code> run before and after each individual test respectively as shown below.</p>
 <p class="image-container"><img style="width: 624.00px" src="img/afe6ff7066b54f02.png"></p>
@@ -124,6 +123,12 @@ class JUnit5LifeCycle</code></pre>
         println(&#34;AfterAll&#34;)
     }</code></pre>
 <p>That&#39;s it! That is all to it for the <strong>JUnit5 Lifecycle</strong>.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quiz" duration="1">
+        <p>Can we have multiple <code>@BeforeEach</code> functions?</p>
 
 
       </google-codelab-step>
@@ -172,8 +177,7 @@ class JUnit5LifeCycle</code></pre>
 <ul>
 <li><code>Given</code> a user</li>
 <li><code>When</code> registering that user</li>
-<li><code>Then</code></li>
-<li>I would expect registrationService would be called to register the user with the backend.</li>
+<li><code>Then</code> I would expect <code>registrationService</code> would be called to register the user with the backend.</li>
 </ul>
 <p>So it would become</p>
 <pre><code>    @Test
@@ -211,7 +215,7 @@ class JUnit5LifeCycle</code></pre>
     }
     . . . . .
 }</code></pre>
-<p>As you may now see that the <code>NewUserUseCase</code> is like a black box. The <code>RegistrationService</code> is declared privately and cannot be accessible to the outside world, therefore, cannot be tested as we cannot verify whether it actually does what it is supposed to.</p>
+<p>As you may now see that the <code>NewUserUseCase</code> is like a black box. The <code>RegistrationService</code> is declared privately and cannot be accessible from the outside world, therefore, cannot be tested as we cannot verify whether it actually does what it is supposed to.</p>
 <h3 is-upgraded><strong>A Possible Solution</strong></h3>
 <p>Making the <code>registrationService</code> a public field would ease the situation and make the class testable. So our test will now become</p>
 <pre><code>    @Test
@@ -228,10 +232,9 @@ class JUnit5LifeCycle</code></pre>
         // verify
         verify { newUserUseCase.registrationService.register(user) }
     }</code></pre>
-<p>Instead of mocking, you can instead use <code>spyk(...)</code> to achieve the same effect.</p>
-<p>For example,<br></p>
+<p>Instead of mocking, you can instead use <code>spyk(...)</code> to achieve the same effect. However, please note that a spy is used upon an instance of the object that has already been initialized. This comes into handy when you are dealing with external code or a third-party library that you do not have access to their code. Below is an example of how you can use a spy.<br></p>
 <pre><code>newUserUseCase.registrationService = spyk(newUserUseCase.registrationService)</code></pre>
-<aside class="special"><p><strong>Note:</strong> However, by doing so, we would be exposing the representation of the object to its callers and if the representation has to change, so do the callers. In the end, this would create more problems than it solves. In the next section, we will be exploring some other alternatives using best practices to our advantage.</p>
+<aside class="special"><p><strong>Note:</strong> By exposing the field as public, however, we would be exposing the representation of the object to its callers and if the representation has to change, so do the callers. In the end, this would create more problems than it solves. In the next section, we will be exploring some other alternatives using best practices to our advantage.</p>
 </aside>
 <h3 is-upgraded><strong>What is Mock?</strong></h3>
 <p>Mocking is primarily used in unit testing. An object under test may have dependencies on other (complex) objects. To isolate the behaviour of the object you want to test, you replace the other objects by mocks that simulate the behaviour of the real objects. This is useful if the real objects are impractical to incorporate into the unit test.</p>
@@ -239,7 +242,7 @@ class JUnit5LifeCycle</code></pre>
 <pre><code>newUserUseCase.registrationService = mockk()</code></pre>
 <p>Denotes that the <code>registrationService</code> is mocked. The syntax <code>mockk()</code> is from <a href="https://mockk.io/" target="_blank">MockK</a> mocking framework, which we will be using throughout the course. By default, the mock itself does not do anything unless it is told to. This is why we also need the next line to tell it what to do, which in this case when the <code>registrationService.register(...)</code> is called.<br></p>
 <pre><code>justRun { newUserUseCase.registrationService.register(any()) }</code></pre>
-<p><code>justRun {...}</code> tells the mock to just execute the method without returning anything (e.g. returning Unit).</p>
+<p><code>justRun {...}</code> tells the mock to just execute the method without returning anything (e.g. returning Unit). If your mock returns a value, instead of <code>justRun {...}</code>, you have to use <code>every {...} Returns T</code> syntax.</p>
 <p><code>any()</code> tells the mock that the method should accept any parameters we throw at it.</p>
 <p>Another way to allow the mock creation without any specific behavior is to passing <code>relaxed = true</code> when declaring the mock. For example,</p>
 <pre><code>newUserUseCase.registrationService = mockk(relaxed = true)</code></pre>
@@ -271,7 +274,7 @@ class JUnit5LifeCycle</code></pre>
 
       </google-codelab-step>
     
-      <google-codelab-step label="SOLID Principles" duration="5">
+      <google-codelab-step label="SOLID Principles" duration="10">
         <p>The goal of the SOLID principles is to reduce dependencies so that we can change one area of software without impacting others. Additionally, they&#39;re intended to make designs easier to understand, maintain, and extend.</p>
 <h2 is-upgraded><strong>Single Responsibility Principle</strong></h2>
 <p>Every class, module, or function in a program should have one responsibility/purpose in a program.</p>
@@ -282,10 +285,43 @@ class JUnit5LifeCycle</code></pre>
 <h2 is-upgraded><strong>Interface Segregation Principle</strong></h2>
 <p>No code should be forced to depend on methods it does not use.</p>
 <h2 is-upgraded><strong>Dependency Inversion Principle</strong></h2>
-<p>high level modules should not depend on low level modules; both should depend on abstractions.</p>
+<p>high level modules should not depend on low level modules and both should depend on abstractions.</p>
 <h2 is-upgraded><strong>Composition Over Inheritance</strong></h2>
-<p>Inheritance is tightly coupled whereas composition is loosely coupled.</p>
-<h3 is-upgraded><strong>Revisit Our NewUserUseCase Example</strong></h3>
+<p>This principle simply states that classes should achieve polymorphic behavior and code reuse by their composition (by containing instances of other classes that implement the desired functionality) rather than inheritance from a base or parent class, which make the composition more loosely coupled than the inheritance. </p>
+<h3 is-upgraded><strong>Let&#39;s Define Our Basic Components</strong></h3>
+<pre><code>Interface Analytic {
+    fun trackEvent(e: Event) { ... }
+    fun trackView(v: View) { ... }
+}
+
+Class SegmentAnalytic: Analytic {
+    override fun trackEvent(e: Event) { ... }
+    override fun trackView(v: View) { ... }
+}</code></pre>
+<p>Now let&#39;s consider the case where we need a little more specialize case of the <code>SegmentAnalytic</code>, for example, adding a transaction id along with other analytic data. We could either implement it using</p>
+<h3 is-upgraded><strong>Inheritance Approach</strong></h3>
+<pre><code>Class TransactionAnalytic: `SegmentAnalytic` {
+    override fun trackEvent(e: Event) {
+        addTransactionId(e)
+        `super.trackEvent(e)`
+    }
+
+    private fun addTransactionId(e: Event) { ... }
+    ...
+}</code></pre>
+<p>Or</p>
+<h3 is-upgraded><strong>Composition Approach</strong></h3>
+<pre><code>Class TransactionAnalytic(`segment: Analytic`): Analytic {
+    override fun trackEvent(e: Event) {
+        addTransactionId(e)
+        `segment.trackEvent(e)`
+    }
+
+    private fun addTransactionId(e: Event) { ... }
+    ...
+}</code></pre>
+<p>The vial differences are highlighted in <code>`Green`</code>. While both implementations can achieve the exact same result, e.g. code reuse, the later approach has the advantage that the child is loosely coupled to its parent, which will make a difference in terms of maintenance and unit testing.</p>
+<h2 is-upgraded><strong>Revisit Our NewUserUseCase Example</strong></h2>
 <pre><code>class NewUserUseCase {
     var registrationService = RegistrationService()
     private val emailService = EmailService()
@@ -342,6 +378,13 @@ class JUnit5LifeCycle</code></pre>
 }</code></pre>
 <p>If you are interested in seeing the fully refactored code, please check out the <em>refactor-original-code</em> branch.</p>
 <pre>git switch /feature/refactor-original-code</pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quiz" duration="1">
+        <p>If you are asked to write two classes that represent <code>Squares</code> and <code>Rectangles</code>, which one would be your base class?</p>
+<p class="image-container"><img style="width: 624.00px" src="img/52018a150df54ae4.jpeg"></p>
 
 
       </google-codelab-step>
@@ -449,6 +492,23 @@ class JUnit5LifeCycle</code></pre>
 </ul>
 <p>Here is also an interesting comparison between the Assertion libraries.</p>
 <p><a href="https://github.com/phellipealexandre/KotlinAssertionLibraryComparison" target="_blank">https://github.com/phellipealexandre/KotlinAssertionLibraryComparison</a></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Quiz" duration="1">
+        <p>Which one would you prefer?</p>
+<pre><code>class NewUserUseCase(
+    private val registrationService: RegistrationService,
+    . . . .
+) {
+    . . . .
+}</code></pre>
+<p>VS</p>
+<pre><code>class NewUserUseCase {
+    private val registrationService: RegistrationService by inject()
+    . . . .
+}</code></pre>
 
 
       </google-codelab-step>
@@ -625,6 +685,7 @@ fun cleanUp() {
       <google-codelab-step label="Take Away" duration="1">
         <p>In this tutorial, you have learned how to create and write unit tests. Furthermore, you have already learned how to handle Coroutines, RxJava, LiveData, and Koin when writing tests. Last but not least, you have also learned how to refactor the code to make it testable, although not necessarily a unit test, using some of the best practices.</p>
 <p>Thank you for reading this far and see you again in the next tutorial where we will be digging deep into the feature of the JUnit5 and more advance cases for testing such as how to handle DI graph.</p>
+<p>If you like this tutorial and want to see more tutorials like this, please help me making it happens by taking this short survey, <a href="https://forms.gle/vdiCfQoiLnuDLb7m9" target="_blank">https://forms.gle/vdiCfQoiLnuDLb7m9</a>. Thanks and see you next time!</p>
 
 
       </google-codelab-step>
